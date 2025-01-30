@@ -1,3 +1,5 @@
+$border-radius: 5px;
+
 .ollama-chatbot {
   padding: 20px;
 
@@ -5,7 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 
     h2 {
       text-decoration: underline;
@@ -23,7 +25,9 @@
   }
 
   .chat-history {
-    min-height: 200px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    min-height: 300px;
     max-height: 80vh;
     padding: 15px;
     border: 1px solid lightgrey;
@@ -33,50 +37,90 @@
 
     .you,
     .bot {
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
       padding: 0px 5px 5px 5px;
       display: flex;
       flex-direction: column;
+      border-radius: $border-radius;
+
       strong {
-        // border: 1px solid white;
         padding: 2px;
         width: 100%;
-        margin-bottom: 0.15rem;
+      }
+
+      .message {
+        padding: 5px 10px;
       }
     }
 
     .you {
-      strong {
+      .you-header {
         color: rgb(0, 140, 255);
       }
       border: 1px solid rgb(0, 140, 255);
+
       text-align: right;
     }
 
     .bot {
-      strong {
+      .bot-header {
         color: rgba(255, 38, 0, 0.829);
       }
       border: 1px solid rgba(255, 38, 0, 0.829);
+
+      .message {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+          margin-top: 0.3rem;
+        }
+
+        li {
+          margin-left: 1rem;
+          margin-top: 0.2rem;
+          margin-bottom: 0.2rem;
+        }
+
+        pre {
+          div {
+            border-radius: $border-radius;
+          }
+        }
+      }
     }
   }
 
   .user-input {
-    border: 1px solid red;
+    // border: 1px solid red;
+    overflow: hidden;
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
 
     input,
     button {
-      padding: 5px;
+      padding: 10px 5px;
+      border: none;
+      font-size: 1rem;
     }
 
     input {
       height: 100%;
       width: 80%;
+      background-color: rgb(49, 49, 49);
     }
 
     button {
       cursor: pointer;
       width: 20%;
+      transition: all 0.5s ease;
+
+      &:hover {
+        background-color: rgba(211, 211, 211, 0.6);
+      }
     }
   }
 }
