@@ -1,5 +1,5 @@
 // app/api/chatbot/route.js
-import ollama from "ollama";
+import ollama from "ollama/dist/index.mjs";
 
 export async function POST(req) {
   const { model, userInput } = await req.json();

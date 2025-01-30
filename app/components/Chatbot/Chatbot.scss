@@ -1,0 +1,82 @@
+.ollama-chatbot {
+  padding: 20px;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    h2 {
+      text-decoration: underline;
+    }
+
+    .model-select {
+      span {
+        margin-right: 5px;
+      }
+
+      select {
+        padding: 5px;
+      }
+    }
+  }
+
+  .chat-history {
+    min-height: 200px;
+    max-height: 80vh;
+    padding: 15px;
+    border: 1px solid lightgrey;
+    overflow-y: scroll;
+    transition: max-height 2s ease-in;
+    scrollbar-width: none;
+
+    .you,
+    .bot {
+      margin-bottom: 0.5rem;
+      padding: 0px 5px 5px 5px;
+      display: flex;
+      flex-direction: column;
+      strong {
+        // border: 1px solid white;
+        padding: 2px;
+        width: 100%;
+        margin-bottom: 0.15rem;
+      }
+    }
+
+    .you {
+      strong {
+        color: rgb(0, 140, 255);
+      }
+      border: 1px solid rgb(0, 140, 255);
+      text-align: right;
+    }
+
+    .bot {
+      strong {
+        color: rgba(255, 38, 0, 0.829);
+      }
+      border: 1px solid rgba(255, 38, 0, 0.829);
+    }
+  }
+
+  .user-input {
+    border: 1px solid red;
+
+    input,
+    button {
+      padding: 5px;
+    }
+
+    input {
+      height: 100%;
+      width: 80%;
+    }
+
+    button {
+      cursor: pointer;
+      width: 20%;
+    }
+  }
+}

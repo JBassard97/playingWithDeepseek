@@ -1,6 +1,7 @@
 // app/components/Chatbot.js
 "use client";
 import { useState } from "react";
+import styles from "./Chatbot.scss"; // Import CSS module correctly
 
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
@@ -9,6 +10,11 @@ const Chatbot = () => {
 
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the form from submitting and refreshing the page
+    sendMessage();
   };
 
   const sendMessage = async () => {
@@ -45,36 +51,35 @@ const Chatbot = () => {
   };
 
   return (
-    <div>
-      <h2>Ollama Chatbot</h2>
-      <div>
-        Current Model:
-        <select value={model} onChange={(e) => setModel(e.target.value)}>
-          <option value="mistral">Mistral (Latest)</option>
-          <option value="gemma:latest">Gemma (Latest)</option>
-          <option value="deepseek-r1">DeepSeek-r1</option>
-        </select>
-      </div>
-
-      <div>
+    <div className="ollama-chatbot">
+      <header>
+        <h2>Ollama Chatbot</h2>
+        <div className="model-select">
+          <span>Current Model:</span>
+          <select value={model} onChange={(e) => setModel(e.target.value)}>
+            <option value="mistral">Mistral (Latest)</option>
+            <option value="gemma:latest">Gemma (Latest)</option>
+            <option value="deepseek-r1">DeepSeek-r1</option>
+          </select>
+        </div>
+      </header>
+      <div className="chat-history">
         {chatHistory.map((entry, index) => (
-          <div
-            key={index}
-            style={{ textAlign: entry.sender === "You" ? "right" : "left" }}
-          >
+          <div key={index} className={entry.sender === "You" ? "you" : "bot"}>
             <strong>{entry.sender}: </strong>
-            {entry.message}
+            <div>{entry.message}</div>
           </div>
         ))}
       </div>
-
-      <input
-        type="text"
-        value={userInput}
-        onChange={handleInputChange}
-        placeholder="Type a message..."
-      />
-      <button onClick={sendMessage}>Send</button>
+      <form className="user-input" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={userInput}
+          onChange={handleInputChange}
+          placeholder="Type a message..."
+        />
+        <button type="submit">Send</button>
+      </form>
     </div>
   );
 };
