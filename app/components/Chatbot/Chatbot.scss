@@ -3,29 +3,40 @@ $border-radius: 5px;
 .ollama-chatbot {
   padding: 20px;
 
+  span {
+    margin-right: 5px;
+  }
+
+  select {
+    padding: 5px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
   header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 1.5rem;
+
+    .top-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .other-options {
+      width: 100%;
+      margin-top: 0.25rem;
+      display: flex;
+      justify-content: flex-end;
+    }
 
     h2 {
       text-decoration: underline;
       color: grey;
-    }
-
-    .model-select {
-      span {
-        margin-right: 5px;
-      }
-
-      select {
-        padding: 5px;
-
-        &:focus {
-          outline: none;
-        }
-      }
     }
   }
 
@@ -37,7 +48,7 @@ $border-radius: 5px;
     padding: 15px;
     border: 1px solid rgba(211, 211, 211, 0.413);
     border-bottom: none;
-    overflow-y: scroll;
+    overflow: scroll;
     transition: max-height 2s ease-in;
     scrollbar-width: none;
 
@@ -48,6 +59,9 @@ $border-radius: 5px;
       display: flex;
       flex-direction: column;
       border-radius: $border-radius;
+      overflow: scroll;
+      scrollbar-width: none;
+      text-wrap: wrap;
 
       strong {
         padding: 2px;
@@ -84,14 +98,17 @@ $border-radius: 5px;
         }
 
         li {
-          margin-left: 1rem;
+          margin-left: 1.5rem;
           margin-top: 0.2rem;
           margin-bottom: 0.2rem;
         }
 
         pre {
+          margin-left: 1.5rem;
+          text-wrap: wrap;
           div {
             border-radius: $border-radius;
+            scrollbar-width: none;
           }
         }
       }
