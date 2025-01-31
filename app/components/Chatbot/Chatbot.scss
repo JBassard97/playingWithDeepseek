@@ -11,6 +11,7 @@ $border-radius: 5px;
 
     h2 {
       text-decoration: underline;
+      color: grey;
     }
 
     .model-select {
@@ -20,6 +21,10 @@ $border-radius: 5px;
 
       select {
         padding: 5px;
+
+        &:focus {
+          outline: none;
+        }
       }
     }
   }
@@ -28,9 +33,10 @@ $border-radius: 5px;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
     min-height: 300px;
-    max-height: 80vh;
+    max-height: 75vh;
     padding: 15px;
-    border: 1px solid lightgrey;
+    border: 1px solid rgba(211, 211, 211, 0.413);
+    border-bottom: none;
     overflow-y: scroll;
     transition: max-height 2s ease-in;
     scrollbar-width: none;
@@ -58,8 +64,6 @@ $border-radius: 5px;
         color: rgb(0, 140, 255);
       }
       border: 1px solid rgb(0, 140, 255);
-
-      text-align: right;
     }
 
     .bot {
@@ -111,6 +115,10 @@ $border-radius: 5px;
       height: 100%;
       width: 80%;
       background-color: rgb(49, 49, 49);
+
+      &:focus {
+        outline: none;
+      }
     }
 
     button {

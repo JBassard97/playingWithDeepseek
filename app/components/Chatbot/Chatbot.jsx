@@ -9,6 +9,7 @@ const modelNames = {
   mistral: "Mistral (Latest)",
   "gemma:latest": "Gemma (Latest)",
   "deepseek-r1:7b": "DeepSeek-R1:7b",
+  "llava:7b": "LLaVA:7b",
 };
 
 const Chatbot = () => {

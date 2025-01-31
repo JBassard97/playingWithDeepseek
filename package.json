@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"next dev\" \"npm run open\"",
+    "open": "start http://localhost:3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -17,5 +18,9 @@
     "react-syntax-highlighter": "^15.6.1",
     "remark-gfm": "^4.0.0",
     "sass": "^1.83.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "open": "^10.1.0"
   }
 }
