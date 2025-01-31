@@ -12,22 +12,47 @@ const modelNames = {
   "llava:7b": "LLaVA:7b",
 };
 
-// Create an object of available Prism themes
 const highlightThemes = Object.keys(themes).reduce((acc, key) => {
-  // Convert camelCase to Title Case for display
   const displayName = key
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (str) => str.toUpperCase());
   return { ...acc, [key]: displayName };
 }, {});
 
+const LoadingIndicator = () => {
+  const [dots, setDots] = useState("");
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
+
+    const timerInterval = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(dotsInterval);
+      clearInterval(timerInterval);
+    };
+  }, []);
+
+  return (
+    <div className="loading-container">
+      <span className="loading-timer">({seconds}s)</span>
+      <span className="loading-dots">Thinking{dots}</span>
+    </div>
+  );
+};
+
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [model, setModel] = useState("mistral");
   const [highlightTheme, setHighlightTheme] = useState("dracula");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Ref for chat history container
   const chatHistoryRef = useRef(null);
 
   useEffect(() => {
@@ -46,34 +71,43 @@ const Chatbot = () => {
   };
 
   const sendMessage = async () => {
-    if (!userInput.trim()) return;
+    if (!userInput.trim() || isLoading) return;
 
     const senderName = modelNames[model] || model;
-
-    setChatHistory([...chatHistory, { sender: "You", message: userInput }]);
+    const userMessage = userInput;
     setUserInput("");
+    setIsLoading(true);
+
+    setChatHistory((prev) => [
+      ...prev,
+      { sender: "You", message: userMessage },
+      { sender: senderName, message: "", isLoading: true },
+    ]);
 
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model, userInput }),
+        body: JSON.stringify({ model, userInput: userMessage }),
       });
 
       if (!response.ok) throw new Error("Failed to fetch response");
 
       const data = await response.json();
-      setChatHistory([
-        ...chatHistory,
-        { sender: "You", message: userInput },
-        { sender: senderName, message: data.response },
-      ]);
+
+      setChatHistory((prev) =>
+        prev.slice(0, -1).concat({ sender: senderName, message: data.response })
+      );
     } catch (error) {
       console.error(error);
-      setChatHistory([
-        ...chatHistory,
-        { sender: senderName, message: "Error: Could not reach the server." },
-      ]);
+      setChatHistory((prev) =>
+        prev.slice(0, -1).concat({
+          sender: senderName,
+          message: "Error: Could not reach the server.",
+        })
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,7 +129,7 @@ const Chatbot = () => {
         </div>
         <div className="other-options">
           <div className="highlight-select">
-            <span>Code Highlight:</span>
+            <span>Code Highlighting:</span>
             <select
               value={highlightTheme}
               onChange={(e) => setHighlightTheme(e.target.value)}
@@ -118,7 +152,11 @@ const Chatbot = () => {
             >
               {entry.sender}:{" "}
             </strong>
-            {entry.sender !== "You" ? (
+            {entry.isLoading ? (
+              <div className="message loading">
+                <LoadingIndicator />
+              </div>
+            ) : entry.sender !== "You" ? (
               <div className="message">
                 <ReactMarkdown
                   components={{
@@ -156,8 +194,11 @@ const Chatbot = () => {
           value={userInput}
           onChange={handleInputChange}
           placeholder="Type a message..."
+          disabled={isLoading}
         />
-        <button type="submit">Send</button>
+        <button type="submit" disabled={isLoading}>
+          Send
+        </button>
       </form>
     </div>
   );
