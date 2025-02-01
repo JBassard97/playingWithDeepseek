@@ -20,20 +20,20 @@ const highlightThemes = Object.keys(themes).reduce((acc, key) => {
 }, {});
 
 const LoadingIndicator = () => {
-  const [dots, setDots] = useState("");
+  // const [dots, setDots] = useState("");
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    const dotsInterval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
-    }, 500);
+    // const dotsInterval = setInterval(() => {
+    //   setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    // }, 500);
 
     const timerInterval = setInterval(() => {
       setSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => {
-      clearInterval(dotsInterval);
+      // clearInterval(dotsInterval);
       clearInterval(timerInterval);
     };
   }, []);
@@ -41,7 +41,7 @@ const LoadingIndicator = () => {
   return (
     <div className="loading-container">
       <span className="loading-timer">({seconds}s)</span>
-      <span className="loading-dots">Thinking{dots}</span>
+      <span className="loading-dots">Thinking...</span>
     </div>
   );
 };
@@ -50,14 +50,14 @@ const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [model, setModel] = useState("mistral");
-  const [highlightTheme, setHighlightTheme] = useState("dracula");
+  const [highlightTheme, setHighlightTheme] = useState("duotoneSea");
   const [isLoading, setIsLoading] = useState(false);
 
   const chatHistoryRef = useRef(null);
 
   useEffect(() => {
     if (chatHistoryRef.current) {
-      chatHistoryRef.current.scrollTop = 0;
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
   }, [chatHistory]);
 
@@ -147,16 +147,15 @@ const Chatbot = () => {
       <div className="chat-history" ref={chatHistoryRef}>
         {chatHistory.map((entry, index) => (
           <div key={index} className={entry.sender === "You" ? "you" : "bot"}>
-            <strong
+            <div
               className={entry.sender === "You" ? "you-header" : "bot-header"}
             >
-              {entry.sender}:{" "}
-            </strong>
+              <strong>{entry.sender}: </strong>
+              {entry.isLoading && <LoadingIndicator />}
+            </div>
             {entry.isLoading ? (
-              <div className="message loading">
-                <LoadingIndicator />
-              </div>
-            ) : entry.sender !== "You" ? (
+              <div className="message loading"></div>
+            ) : (
               <div className="message">
                 <ReactMarkdown
                   components={{
@@ -182,8 +181,6 @@ const Chatbot = () => {
                   {entry.message}
                 </ReactMarkdown>
               </div>
-            ) : (
-              <div className="message">{entry.message}</div>
             )}
           </div>
         ))}
